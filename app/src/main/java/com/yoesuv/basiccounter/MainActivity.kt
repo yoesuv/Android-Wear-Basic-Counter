@@ -59,7 +59,9 @@ class MainActivity : ComponentActivity() {
                             fontSize = 120.sp
                         )
                         Row {
-                            Button(onClick = { /*TODO*/ }) {
+                            Button(onClick = {
+                                viewModel.subtract()
+                            }) {
                                 Icon(
                                     imageVector = Icons.Default.Remove,
                                     contentDescription = null,
@@ -67,7 +69,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             Spacer(modifier = Modifier.width(8.dp))
-                            Button(onClick = { /*TODO*/ }) {
+                            Button(onClick = {
+                                viewModel.add()
+                            }) {
                                 Icon(
                                     imageVector = Icons.Default.Add,
                                     contentDescription = null,
