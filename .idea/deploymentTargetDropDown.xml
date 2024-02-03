@@ -5,6 +5,12 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="basic-counter-wear">
+        <State />
+      </entry>
+      <entry key="basiccounterwear">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
