@@ -24,6 +24,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,48 +39,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BasicCounterTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = getString(R.string.app_name),
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 24.sp
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "${viewModel.counter.observeAsState().value}",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 120.sp
-                        )
-                        Row {
-                            Button(onClick = {
-                                viewModel.subtract()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Remove,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Button(onClick = {
-                                viewModel.add()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
-                            }
-                        }
-                    }
+                    MainLayout(viewModel)
                 }
             }
         }
@@ -87,17 +51,50 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MainLayout(viewModel: MainViewModel) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = LocalContext.current.getString(R.string.app_name),
+            fontWeight = FontWeight.Medium,
+            fontSize = 24.sp
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "${viewModel.counter.observeAsState().value}",
+            fontWeight = FontWeight.Bold,
+            fontSize = 120.sp
+        )
+        Row {
+            Button(onClick = {
+                viewModel.subtract()
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Remove,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(onClick = {
+                viewModel.add()
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     BasicCounterTheme {
-        Greeting("Android")
+        MainLayout(MainViewModel())
     }
 }
