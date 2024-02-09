@@ -51,6 +51,7 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
+        viewModel.init(this)
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
