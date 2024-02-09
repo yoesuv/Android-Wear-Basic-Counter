@@ -9,6 +9,7 @@ package com.yoesuv.basiccounter.wear.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,10 +20,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,11 +39,13 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
 import com.yoesuv.basiccounter.wear.R
 import com.yoesuv.basiccounter.wear.presentation.theme.BasicCounterTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainWearViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
@@ -51,13 +54,13 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp("Android")
+            WearApp(viewModel)
         }
     }
 }
 
 @Composable
-fun WearApp(greetingName: String) {
+fun WearApp(viewModel: MainWearViewModel) {
     BasicCounterTheme {
         Box(
             modifier = Modifier
@@ -68,10 +71,16 @@ fun WearApp(greetingName: String) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "0", fontSize = 54.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "${viewModel.counter.observeAsState().value}",
+                    fontSize = 54.sp,
+                    fontWeight = FontWeight.Bold
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Row {
-                    Button(shape = RectangleShape, onClick = {  }) {
+                    Button(shape = RectangleShape, onClick = {
+                        viewModel.subtract()
+                    }) {
                         Row {
                             Icon(
                                 imageVector = Icons.Default.Remove,
@@ -81,7 +90,9 @@ fun WearApp(greetingName: String) {
                         }
                     }
                     Spacer(modifier = Modifier.width(8.dp))
-                    Button(shape = RectangleShape, onClick = { }) {
+                    Button(shape = RectangleShape, onClick = {
+                        viewModel.add()
+                    }) {
                         Row {
                             Icon(
                                 imageVector = Icons.Default.Add,
@@ -96,18 +107,8 @@ fun WearApp(greetingName: String) {
     }
 }
 
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
-
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    WearApp("Preview Android")
+    WearApp(MainWearViewModel())
 }
