@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "Basic Counter"
 include(":app")
 include(":basic-counter-wear")
+include(":source")

@@ -4,9 +4,9 @@ import android.util.Log
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
-import com.yoesuv.basiccounter.wear.data.COUNT_PATH
-import com.yoesuv.basiccounter.wear.data.DATA_ITEM_RECEIVED_PATH
-import com.yoesuv.basiccounter.wear.data.TAG_DEBUG
+import com.yoesuv.basiccounter.source.Constants.COUNT_PATH
+import com.yoesuv.basiccounter.source.Constants.DATA_ITEM_RECEIVED_PATH
+import com.yoesuv.basiccounter.source.Constants.TAG_DEBUG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.PutDataRequest
 import com.google.android.gms.wearable.Wearable
-import com.yoesuv.basiccounter.wear.data.COUNT_PATH
-import com.yoesuv.basiccounter.wear.data.TAG_DEBUG
-import com.yoesuv.basiccounter.wear.data.TAG_ERROR
+import com.yoesuv.basiccounter.source.Constants.COUNT_PATH
+import com.yoesuv.basiccounter.source.Constants.TAG_DEBUG
+import com.yoesuv.basiccounter.source.Constants.TAG_ERROR
 
 class MainWearViewModel: ViewModel() {
 
