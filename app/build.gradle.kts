@@ -4,6 +4,20 @@ plugins {
 }
 
 android {
+
+    val appKeyAlias: String by project
+    val appKeyPassword: String by project
+    val appStorePassword: String by project
+
+    signingConfigs {
+        create("config") {
+            storeFile = file("../my-wear.keystore")
+            keyAlias = appKeyAlias
+            keyPassword = appKeyPassword
+            storePassword = appStorePassword
+        }
+    }
+
     namespace = "com.yoesuv.basiccounter"
     compileSdk = 34
 
@@ -21,12 +35,23 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+            isDebuggable = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("config")
+        }
+        release {
+            isMinifyEnabled = true
+            isDebuggable = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("config")
         }
     }
     compileOptions {
