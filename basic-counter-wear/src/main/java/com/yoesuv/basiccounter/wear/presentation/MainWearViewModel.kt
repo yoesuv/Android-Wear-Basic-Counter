@@ -22,13 +22,13 @@ class MainWearViewModel: ViewModel() {
 
     fun add() {
         val current = counter.value ?: 0
-        counter.postValue(current + 1)
+        counter.value = current + 1
         send()
     }
 
     fun subtract() {
         val current = counter.value ?: 0
-        counter.postValue(current - 1)
+        counter.value = current - 1
         send()
     }
 

@@ -39,7 +39,7 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import com.yoesuv.basiccounter.wear.R
+import com.yoesuv.basiccounter.R
 import com.yoesuv.basiccounter.wear.presentation.theme.BasicCounterTheme
 
 class MainActivity : ComponentActivity() {

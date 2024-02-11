@@ -37,7 +37,9 @@ class MainViewModel: ViewModel(), DataClient.OnDataChangedListener {
                 if (uri.path == Constants.COUNT_PATH) {
                     val data = dataEvent.dataItem.data!!
                     val strCount = String(data, StandardCharsets.UTF_8)
+                    val intCount = strCount.toInt()
                     Log.d(Constants.TAG_DEBUG, "MainViewModel # onDataChanged: $strCount")
+                    counter.postValue(intCount)
                 }
             }
         }

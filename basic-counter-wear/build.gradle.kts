@@ -18,11 +18,11 @@ android {
         }
     }
 
-    namespace = "com.yoesuv.basiccounter.wear"
+    namespace = "com.yoesuv.basiccounter"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.yoesuv.basiccounter.wear"
+        applicationId = "com.yoesuv.basiccounter"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
