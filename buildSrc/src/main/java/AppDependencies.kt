@@ -5,7 +5,7 @@ object AndroidDependencies {
     const val lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
     const val lifeData = "androidx.compose.runtime:runtime-livedata:1.6.0"
     const val iconExtended = "androidx.compose.material:material-icons-extended:1.6.0"
-    const val wearable = "com.google.android.gms:play-services-wearable:18.1.0"
+
 }
 
 object WearableDependencies {
