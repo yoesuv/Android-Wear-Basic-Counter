@@ -1,4 +1,10 @@
+import org.gradle.api.JavaVersion
+
 object AndroidDependencies {
+
+    val compileSource = JavaVersion.VERSION_11
+    val compileTarget = JavaVersion.VERSION_11
+    const val jvmTarget = "11"
 
     const val core = "androidx.core:core-ktx:1.12.0"
     const val compose = "androidx.activity:activity-compose:1.8.2"
