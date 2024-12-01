@@ -19,3 +19,9 @@ object CoroutineDependencies {
     const val playService = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1"
 
 }
+
+object KotlinDependencies {
+
+    const val kotlinCompiler = "1.5.14"
+
+}
