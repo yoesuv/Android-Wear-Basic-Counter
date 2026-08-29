@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -19,12 +19,14 @@ android {
     }
 
     namespace = "com.yoesuv.basiccounter"
-    compileSdk = 34
+    compileSdk {
+        version = release(37)
+    }
 
     defaultConfig {
         applicationId = "com.yoesuv.basiccounter"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0.1"
         vectorDrawables {
@@ -35,7 +37,9 @@ android {
 
     buildTypes {
         debug {
-            isMinifyEnabled = false
+            optimization {
+                enable = false
+            }
             isDebuggable = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -44,7 +48,9 @@ android {
             signingConfig = signingConfigs.getByName("config")
         }
         release {
-            isMinifyEnabled = false
+            optimization {
+                enable = false
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -53,17 +59,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = AndroidDependencies.compileSource
-        targetCompatibility = AndroidDependencies.compileTarget
-    }
-    kotlinOptions {
-        jvmTarget = AndroidDependencies.jvmTarget
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = KotlinDependencies.kotlinCompiler
     }
     packaging {
         resources {
@@ -74,22 +74,23 @@ android {
 
 dependencies {
 
-    implementation(WearableDependencies.wearable)
-    implementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.wear.compose:compose-material:1.1.2")
-    implementation("androidx.wear.compose:compose-foundation:1.1.2")
-    implementation(AndroidDependencies.compose)
-    implementation("androidx.core:core-splashscreen:1.0.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(libs.play.services.wearable)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.wear.compose.material3)
+    implementation(libs.androidx.wear.compose.foundation)
+    implementation(libs.androidx.wear.tooling.preview)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.splashscreen)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation(project(":source"))
 
-    implementation(AndroidDependencies.iconExtended)
-    implementation(AndroidDependencies.lifeData)
-    implementation(CoroutineDependencies.playService)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.kotlinx.coroutines.play.services)
 }

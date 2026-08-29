@@ -26,19 +26,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.FilledIconButton
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.IconButtonDefaults
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.yoesuv.basiccounter.R
 import com.yoesuv.basiccounter.wear.presentation.theme.BasicCounterTheme
 
@@ -66,7 +66,7 @@ fun WearApp(viewModel: MainWearViewModel) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background),
+                .background(MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -79,28 +79,24 @@ fun WearApp(viewModel: MainWearViewModel) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Row {
-                    Button(shape = RectangleShape, onClick = {
-                        viewModel.subtract()
-                    }) {
-                        Row {
-                            Icon(
-                                imageVector = Icons.Default.Remove,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
+                    FilledIconButton(
+                        onClick = { viewModel.subtract() },
+                        shapes = IconButtonDefaults.shapes(RectangleShape)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Remove,
+                            contentDescription = stringResource(R.string.description_subtract)
+                        )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
-                    Button(shape = RectangleShape, onClick = {
-                        viewModel.add()
-                    }) {
-                        Row {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
+                    FilledIconButton(
+                        onClick = { viewModel.add() },
+                        shapes = IconButtonDefaults.shapes(RectangleShape)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(R.string.description_add)
+                        )
                     }
                 }
             }
@@ -108,7 +104,7 @@ fun WearApp(viewModel: MainWearViewModel) {
     }
 }
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
     WearApp(MainWearViewModel())

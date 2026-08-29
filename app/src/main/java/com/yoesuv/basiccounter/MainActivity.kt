@@ -24,7 +24,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,7 +60,7 @@ fun MainLayout(viewModel: MainViewModel) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = LocalContext.current.getString(R.string.app_name),
+            text = stringResource(R.string.app_name),
             fontWeight = FontWeight.Medium,
             fontSize = 24.sp
         )
