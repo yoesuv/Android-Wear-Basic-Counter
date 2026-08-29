@@ -12,8 +12,9 @@ import com.yoesuv.basiccounter.source.Constants.COUNT_PATH
 import com.yoesuv.basiccounter.source.Constants.TAG_DEBUG
 import com.yoesuv.basiccounter.source.Constants.TAG_ERROR
 
-class MainWearViewModel : ViewModel(), DataClient.OnDataChangedListener {
-
+class MainWearViewModel :
+    ViewModel(),
+    DataClient.OnDataChangedListener {
     private lateinit var dataClient: DataClient
     var counter: MutableLiveData<Int> = MutableLiveData(0)
 
@@ -38,11 +39,13 @@ class MainWearViewModel : ViewModel(), DataClient.OnDataChangedListener {
         val counter = this.counter.value ?: 0
         val request = PutDataRequest.create(COUNT_PATH)
         request.setData("$counter".toByteArray())
-        dataClient.putDataItem(request.setUrgent()).addOnSuccessListener {
-            Log.d(TAG_DEBUG, "MainWearViewModel # SUCCESS SEND DATA ${it.data}")
-        }.addOnFailureListener {
-            Log.e(TAG_ERROR, "MainWearViewModel # ERROR $it")
-        }
+        dataClient
+            .putDataItem(request.setUrgent())
+            .addOnSuccessListener {
+                Log.d(TAG_DEBUG, "MainWearViewModel # SUCCESS SEND DATA ${it.data}")
+            }.addOnFailureListener {
+                Log.e(TAG_ERROR, "MainWearViewModel # ERROR $it")
+            }
     }
 
     override fun onCleared() {
@@ -65,5 +68,4 @@ class MainWearViewModel : ViewModel(), DataClient.OnDataChangedListener {
             }
         }
     }
-
 }

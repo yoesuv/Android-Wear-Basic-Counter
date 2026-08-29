@@ -10,7 +10,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.material3.FilledIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButtonDefaults
@@ -43,7 +43,6 @@ import com.yoesuv.basiccounter.R
 import com.yoesuv.basiccounter.wear.presentation.theme.BasicCounterTheme
 
 class MainActivity : ComponentActivity() {
-
     private val viewModel: MainWearViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,38 +63,39 @@ class MainActivity : ComponentActivity() {
 fun WearApp(viewModel: MainWearViewModel) {
     BasicCounterTheme {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center,
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = "${viewModel.counter.observeAsState().value}",
                     fontSize = 54.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Row {
                     FilledIconButton(
                         onClick = { viewModel.subtract() },
-                        shapes = IconButtonDefaults.shapes(RectangleShape)
+                        shapes = IconButtonDefaults.shapes(RectangleShape),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Remove,
-                            contentDescription = stringResource(R.string.description_subtract)
+                            contentDescription = stringResource(R.string.description_subtract),
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     FilledIconButton(
                         onClick = { viewModel.add() },
-                        shapes = IconButtonDefaults.shapes(RectangleShape)
+                        shapes = IconButtonDefaults.shapes(RectangleShape),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = stringResource(R.string.description_add)
+                            contentDescription = stringResource(R.string.description_add),
                         )
                     }
                 }

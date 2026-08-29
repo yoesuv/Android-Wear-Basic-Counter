@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import com.yoesuv.basiccounter.ui.theme.BasicCounterTheme
 
 class MainActivity : ComponentActivity() {
-
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +43,7 @@ class MainActivity : ComponentActivity() {
             BasicCounterTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     MainLayout(viewModel)
                 }
@@ -57,18 +56,18 @@ class MainActivity : ComponentActivity() {
 fun MainLayout(viewModel: MainViewModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
             text = stringResource(R.string.app_name),
             fontWeight = FontWeight.Medium,
-            fontSize = 24.sp
+            fontSize = 24.sp,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "${viewModel.counter.observeAsState().value}",
             fontWeight = FontWeight.Bold,
-            fontSize = 120.sp
+            fontSize = 120.sp,
         )
         Row {
             Button(onClick = {
@@ -77,7 +76,7 @@ fun MainLayout(viewModel: MainViewModel) {
                 Icon(
                     imageVector = Icons.Default.Remove,
                     contentDescription = null,
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
@@ -87,7 +86,7 @@ fun MainLayout(viewModel: MainViewModel) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = null,
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         }

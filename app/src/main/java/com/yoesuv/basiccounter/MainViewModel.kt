@@ -14,8 +14,9 @@ import com.yoesuv.basiccounter.source.Constants.TAG_DEBUG
 import com.yoesuv.basiccounter.source.Constants.TAG_ERROR
 import java.nio.charset.StandardCharsets
 
-class MainViewModel : ViewModel(), DataClient.OnDataChangedListener {
-
+class MainViewModel :
+    ViewModel(),
+    DataClient.OnDataChangedListener {
     private lateinit var dataClient: DataClient
     var counter: MutableLiveData<Int> = MutableLiveData(0)
 
@@ -40,11 +41,13 @@ class MainViewModel : ViewModel(), DataClient.OnDataChangedListener {
         val counter = this.counter.value ?: 0
         val request = PutDataRequest.create(Constants.COUNT_PATH)
         request.setData("$counter".toByteArray())
-        dataClient.putDataItem(request.setUrgent()).addOnSuccessListener {
-            Log.d(TAG_DEBUG, "MainViewModel # SUCCESS SEND DATA ${it.data}")
-        }.addOnFailureListener {
-            Log.e(TAG_ERROR, "MainViewModel # ERROR $it")
-        }
+        dataClient
+            .putDataItem(request.setUrgent())
+            .addOnSuccessListener {
+                Log.d(TAG_DEBUG, "MainViewModel # SUCCESS SEND DATA ${it.data}")
+            }.addOnFailureListener {
+                Log.e(TAG_ERROR, "MainViewModel # ERROR $it")
+            }
     }
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
@@ -61,5 +64,4 @@ class MainViewModel : ViewModel(), DataClient.OnDataChangedListener {
             }
         }
     }
-
 }

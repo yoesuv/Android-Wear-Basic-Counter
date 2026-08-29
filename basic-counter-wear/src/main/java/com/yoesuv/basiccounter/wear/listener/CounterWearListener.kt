@@ -15,7 +15,6 @@ import kotlinx.coroutines.tasks.await
 import java.nio.charset.StandardCharsets
 
 class CounterWearListener : WearableListenerService() {
-
     private val messageClient by lazy { Wearable.getMessageClient(this) }
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -35,9 +34,7 @@ class CounterWearListener : WearableListenerService() {
                         exception.printStackTrace()
                     }
                 }
-
             }
         }
     }
-
 }
