@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.annotation.MainThread
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -36,6 +37,7 @@ class CounterRepository(
 
     val counter: LiveData<Int> = _counter
 
+    @MainThread
     fun start() {
         if (started) return
         dataClient.addListener(this)
@@ -50,14 +52,17 @@ class CounterRepository(
             }
     }
 
+    @MainThread
     fun add() {
         applyLocalDelta(+1)
     }
 
+    @MainThread
     fun subtract() {
         applyLocalDelta(-1)
     }
 
+    @MainThread
     fun close() {
         if (!started) return
         dataClient.removeListener(this)
@@ -92,20 +97,21 @@ class CounterRepository(
         reconcileAgainstKnownNodes()
     }
 
+    @MainThread
     private fun applyLocalDelta(delta: Int) {
         val id = synchronized(lock) { nodeId }
         if (id == null) {
             synchronized(lock) { pendingDeltas.add(delta) }
             return
         }
-        val nextLocal =
+        val (nextTotal, nextLocalDelta) =
             synchronized(lock) {
                 val current = nodeDeltas[id] ?: 0
                 nodeDeltas[id] = current + delta
-                recompute()
+                recompute() to (nodeDeltas[id] ?: 0)
             }
-        _counter.value = nextLocal
-        broadcast(id, nodeDeltas[id] ?: 0)
+        _counter.value = nextTotal
+        broadcast(id, nextLocalDelta)
     }
 
     private fun ingest(
@@ -133,21 +139,20 @@ class CounterRepository(
         next?.let { _counter.postValue(it) }
     }
 
+    @MainThread
     private fun flushPending(id: String) {
-        val cumulative =
+        val (nextTotal, nextLocalDelta) =
             synchronized(lock) {
                 nodeId = id
-                if (pendingDeltas.isEmpty()) {
-                    recompute()
-                } else {
+                if (pendingDeltas.isNotEmpty()) {
                     val base = nodeDeltas[id] ?: 0
                     nodeDeltas[id] = base + pendingDeltas.sum()
                     pendingDeltas.clear()
-                    recompute()
                 }
+                recompute() to (nodeDeltas[id] ?: 0)
             }
-        _counter.value = cumulative
-        broadcast(id, nodeDeltas[id] ?: 0)
+        _counter.value = nextTotal
+        broadcast(id, nextLocalDelta)
     }
 
     private fun recompute(): Int = nodeDeltas.values.sum()
