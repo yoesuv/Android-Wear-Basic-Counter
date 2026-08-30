@@ -96,5 +96,4 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.play.services.wearable)
-    implementation(libs.kotlinx.coroutines.play.services)
 }

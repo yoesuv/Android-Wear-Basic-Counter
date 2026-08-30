@@ -33,6 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.wear.compose.material3.FilledIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButtonDefaults
@@ -50,17 +52,20 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        viewModel.init(this)
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp(viewModel)
+            WearApp(viewModel.counter, viewModel::add, viewModel::subtract)
         }
     }
 }
 
 @Composable
-fun WearApp(viewModel: MainWearViewModel) {
+fun WearApp(
+    counter: LiveData<Int>,
+    onAdd: () -> Unit,
+    onSubtract: () -> Unit,
+) {
     BasicCounterTheme {
         Box(
             modifier =
@@ -73,14 +78,14 @@ fun WearApp(viewModel: MainWearViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "${viewModel.counter.observeAsState().value}",
+                    text = "${counter.observeAsState().value}",
                     fontSize = 54.sp,
                     fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Row {
                     FilledIconButton(
-                        onClick = { viewModel.subtract() },
+                        onClick = onSubtract,
                         shapes = IconButtonDefaults.shapes(RectangleShape),
                     ) {
                         Icon(
@@ -90,7 +95,7 @@ fun WearApp(viewModel: MainWearViewModel) {
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     FilledIconButton(
-                        onClick = { viewModel.add() },
+                        onClick = onAdd,
                         shapes = IconButtonDefaults.shapes(RectangleShape),
                     ) {
                         Icon(
@@ -107,5 +112,5 @@ fun WearApp(viewModel: MainWearViewModel) {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    WearApp(MainWearViewModel())
+    WearApp(MutableLiveData(0), {}, {})
 }

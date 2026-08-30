@@ -1,74 +1,30 @@
 package com.yoesuv.basiccounter
 
-import android.content.Context
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.google.android.gms.wearable.DataClient
-import com.google.android.gms.wearable.DataEvent
-import com.google.android.gms.wearable.DataEventBuffer
-import com.google.android.gms.wearable.PutDataRequest
-import com.google.android.gms.wearable.Wearable
-import com.yoesuv.basiccounter.source.Constants.COUNT_PATH
-import com.yoesuv.basiccounter.source.Constants.TAG_DEBUG
-import com.yoesuv.basiccounter.source.Constants.TAG_ERROR
-import java.nio.charset.StandardCharsets
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.yoesuv.basiccounter.source.CounterRepository
 
-class MainViewModel :
-    ViewModel(),
-    DataClient.OnDataChangedListener {
-    private lateinit var dataClient: DataClient
-    var counter: MutableLiveData<Int> = MutableLiveData(0)
+class MainViewModel(
+    application: Application,
+) : AndroidViewModel(application) {
+    private val repository = CounterRepository(application)
 
-    fun init(context: Context) {
-        dataClient = Wearable.getDataClient(context)
-        dataClient.addListener(this)
+    val counter = repository.counter
+
+    init {
+        repository.start()
     }
 
     fun add() {
-        val current = counter.value ?: 0
-        counter.value = current + 1
-        send()
+        repository.add()
     }
 
     fun subtract() {
-        val current = counter.value ?: 0
-        counter.value = current - 1
-        send()
+        repository.subtract()
     }
 
     override fun onCleared() {
-        if (::dataClient.isInitialized) {
-            dataClient.removeListener(this)
-        }
-    }
-
-    private fun send() {
-        val counter = this.counter.value ?: 0
-        val request = PutDataRequest.create(COUNT_PATH)
-        request.data = "$counter".toByteArray()
-        dataClient
-            .putDataItem(request.setUrgent())
-            .addOnSuccessListener {
-                Log.d(TAG_DEBUG, "MainViewModel # SUCCESS SEND DATA ${it.data}")
-            }.addOnFailureListener {
-                Log.e(TAG_ERROR, "MainViewModel # ERROR $it")
-            }
-    }
-
-    override fun onDataChanged(dataEvents: DataEventBuffer) {
-        dataEvents.forEach { dataEvent ->
-            if (dataEvent.type != DataEvent.TYPE_CHANGED) return@forEach
-            if (dataEvent.dataItem.data != null) {
-                val uri = dataEvent.dataItem.uri
-                if (uri.path == COUNT_PATH) {
-                    val data = dataEvent.dataItem.data!!
-                    val strCount = String(data, StandardCharsets.UTF_8)
-                    val intCount = strCount.toIntOrNull() ?: return@forEach
-                    Log.d(TAG_DEBUG, "MainViewModel # onDataChanged: $strCount")
-                    counter.postValue(intCount)
-                }
-            }
-        }
+        repository.close()
+        super.onCleared()
     }
 }

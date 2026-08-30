@@ -29,6 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.yoesuv.basiccounter.ui.theme.BasicCounterTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,15 +39,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.init(this)
-
         setContent {
             BasicCounterTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    MainLayout(viewModel)
+                    MainLayout(viewModel.counter, viewModel::add, viewModel::subtract)
                 }
             }
         }
@@ -53,7 +53,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainLayout(viewModel: MainViewModel) {
+fun MainLayout(
+    counter: LiveData<Int>,
+    onAdd: () -> Unit,
+    onSubtract: () -> Unit,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -65,13 +69,13 @@ fun MainLayout(viewModel: MainViewModel) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "${viewModel.counter.observeAsState().value}",
+            text = "${counter.observeAsState().value}",
             fontWeight = FontWeight.Bold,
             fontSize = 120.sp,
         )
         Row {
             Button(onClick = {
-                viewModel.subtract()
+                onSubtract()
             }) {
                 Icon(
                     imageVector = Icons.Default.Remove,
@@ -81,7 +85,7 @@ fun MainLayout(viewModel: MainViewModel) {
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(onClick = {
-                viewModel.add()
+                onAdd()
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -97,6 +101,6 @@ fun MainLayout(viewModel: MainViewModel) {
 @Composable
 fun GreetingPreview() {
     BasicCounterTheme {
-        MainLayout(MainViewModel())
+        MainLayout(MutableLiveData(0), {}, {})
     }
 }

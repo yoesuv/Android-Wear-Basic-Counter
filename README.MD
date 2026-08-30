@@ -10,15 +10,20 @@ Basic counter with bidirectional sync between phone and Wear OS via `DataClient`
 
 ### Features
 - Increment/decrement counter on either device, auto-sync to the other.
-- `DataClient` + `WearableListenerService` for foreground/background sync.
+- `DataClient` for foreground synchronization while either app is open.
 
 ### Modules
 - `app` - Phone UI (Compose Material3)
 - `basic-counter-wear` - Watch UI (Wear Compose Material3, `SplashScreen`)
-- `source` - Shared `Constants` (`COUNT_PATH`, tags)
+- `source` - Shared `CounterRepository` and `Constants` (`COUNT_PATH`, tags)
+
+The repository owns the Wearable `DataClient`, event filtering, payload parsing,
+and counter writes. Both ViewModels only expose repository state and forward UI
+actions. This example allows edits on both devices; simultaneous edits use the
+last value received and are not conflict-resolved.
 
 ### Tech Stack
-Kotlin, Jetpack Compose, `play-services-wearable` `20.0.1`, `kotlinx-coroutines-play-services`, Gradle Version Catalog, `compileSdk 37`.
+Kotlin, Jetpack Compose, `play-services-wearable` `20.0.1`, Gradle Version Catalog, `compileSdk 37`.
 
 ### Requirements
 Android Studio Ladybug+, JDK 11, Phone emulator **Google Play** image + Wear OS emulator (matching API level recommended).

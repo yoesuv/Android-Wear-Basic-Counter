@@ -69,7 +69,6 @@ android {
 
 dependencies {
 
-    implementation(libs.play.services.wearable)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
@@ -87,5 +86,5 @@ dependencies {
 
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.runtime.livedata)
-    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.play.services.wearable)
 }
