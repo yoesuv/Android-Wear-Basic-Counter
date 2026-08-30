@@ -66,22 +66,26 @@ class CounterRepository(
     }
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
-        dataEvents.forEach { dataEvent ->
-            val path = dataEvent.dataItem.uri.path ?: return@forEach
-            if (!path.startsWith(Constants.DELTA_PREFIX)) return@forEach
+        dataEvents.use { events ->
+            events.forEach { dataEvent ->
+                val path = dataEvent.dataItem.uri.path ?: return@forEach
+                if (!path.startsWith(Constants.DELTA_PREFIX)) return@forEach
 
-            val remoteNode = path.removePrefix(Constants.DELTA_PREFIX)
-            when (dataEvent.type) {
-                DataEvent.TYPE_CHANGED -> {
-                    val delta =
-                        String(dataEvent.dataItem.data ?: return@forEach, StandardCharsets.UTF_8)
-                            .toIntOrNull()
-                            ?: return@forEach
-                    ingest(remoteNode, delta)
-                }
+                val remoteNode = path.removePrefix(Constants.DELTA_PREFIX)
+                when (dataEvent.type) {
+                    DataEvent.TYPE_CHANGED -> {
+                        val delta =
+                            String(
+                                dataEvent.dataItem.data ?: return@forEach,
+                                StandardCharsets.UTF_8,
+                            ).toIntOrNull()
+                                ?: return@forEach
+                        ingest(remoteNode, delta)
+                    }
 
-                DataEvent.TYPE_DELETED -> {
-                    removeNode(remoteNode)
+                    DataEvent.TYPE_DELETED -> {
+                        removeNode(remoteNode)
+                    }
                 }
             }
         }
