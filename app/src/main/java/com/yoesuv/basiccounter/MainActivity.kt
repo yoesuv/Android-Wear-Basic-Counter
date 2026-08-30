@@ -79,7 +79,7 @@ fun MainLayout(
             }) {
                 Icon(
                     imageVector = Icons.Default.Remove,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.description_subtract),
                     tint = Color.White,
                 )
             }
@@ -89,7 +89,7 @@ fun MainLayout(
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.description_add),
                     tint = Color.White,
                 )
             }

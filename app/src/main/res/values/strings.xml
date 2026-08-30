@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Basic Counter</string>
+    <string name="description_add">Add</string>
+    <string name="description_subtract">Subtract</string>
 </resources>
