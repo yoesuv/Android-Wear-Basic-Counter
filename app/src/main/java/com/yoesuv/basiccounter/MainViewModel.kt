@@ -5,10 +5,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.wearable.DataClient
+import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.PutDataRequest
 import com.google.android.gms.wearable.Wearable
-import com.yoesuv.basiccounter.source.Constants
 import com.yoesuv.basiccounter.source.Constants.COUNT_PATH
 import com.yoesuv.basiccounter.source.Constants.TAG_DEBUG
 import com.yoesuv.basiccounter.source.Constants.TAG_ERROR
@@ -37,10 +37,16 @@ class MainViewModel :
         send()
     }
 
+    override fun onCleared() {
+        if (::dataClient.isInitialized) {
+            dataClient.removeListener(this)
+        }
+    }
+
     private fun send() {
         val counter = this.counter.value ?: 0
-        val request = PutDataRequest.create(Constants.COUNT_PATH)
-        request.setData("$counter".toByteArray())
+        val request = PutDataRequest.create(COUNT_PATH)
+        request.data = "$counter".toByteArray()
         dataClient
             .putDataItem(request.setUrgent())
             .addOnSuccessListener {
@@ -52,13 +58,14 @@ class MainViewModel :
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         dataEvents.forEach { dataEvent ->
+            if (dataEvent.type != DataEvent.TYPE_CHANGED) return@forEach
             if (dataEvent.dataItem.data != null) {
                 val uri = dataEvent.dataItem.uri
                 if (uri.path == COUNT_PATH) {
                     val data = dataEvent.dataItem.data!!
                     val strCount = String(data, StandardCharsets.UTF_8)
-                    val intCount = strCount.toInt()
-                    Log.d(Constants.TAG_DEBUG, "MainViewModel # onDataChanged: $strCount")
+                    val intCount = strCount.toIntOrNull() ?: return@forEach
+                    Log.d(TAG_DEBUG, "MainViewModel # onDataChanged: $strCount")
                     counter.postValue(intCount)
                 }
             }
