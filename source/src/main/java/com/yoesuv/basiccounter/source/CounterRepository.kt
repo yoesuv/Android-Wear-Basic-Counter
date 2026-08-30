@@ -3,6 +3,7 @@ package com.yoesuv.basiccounter.source
 import android.content.Context
 import android.provider.Settings
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.wearable.DataClient
@@ -11,7 +12,6 @@ import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.PutDataRequest
 import com.google.android.gms.wearable.Wearable
 import java.nio.charset.StandardCharsets
-import androidx.core.net.toUri
 
 class CounterRepository(
     context: Context,
@@ -117,7 +117,7 @@ class CounterRepository(
     private fun requestCurrentState() {
         val uri = "wear://*${Constants.DELTA_PREFIX}".toUri()
         dataClient
-            .getDataItems(uri)
+            .getDataItems(uri, DataClient.FILTER_PREFIX)
             .addOnSuccessListener { buffer ->
                 buffer.use { items ->
                     items.forEach { item ->
