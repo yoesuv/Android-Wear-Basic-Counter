@@ -15,12 +15,17 @@ Basic counter with bidirectional sync between phone and Wear OS via `DataClient`
 ### Modules
 - `app` - Phone UI (Compose Material3)
 - `basic-counter-wear` - Watch UI (Wear Compose Material3, `SplashScreen`)
-- `source` - Shared `CounterRepository` and `Constants` (`COUNT_PATH`, tags)
+- `source` - Shared `CounterRepository` and `Constants` (`DELTA_PREFIX`, tags)
 
 The repository owns the Wearable `DataClient`, event filtering, payload parsing,
 and counter writes. Both ViewModels only expose repository state and forward UI
-actions. This example allows edits on both devices; simultaneous edits use the
-last value received and are not conflict-resolved.
+actions.
+
+Sync uses a conflict-free PN-Counter: each device owns a per-node delta path
+(`/count/delta/<node>`) and broadcasts only its own cumulative net change.
+Because increments/decrements from different devices are commutative and applied
+additively, simultaneous edits on both devices never lose updates. On connect, a
+device loads existing delta items to catch up to the latest total.
 
 ### Tech Stack
 Kotlin, Jetpack Compose, `play-services-wearable` `20.0.1`, Gradle Version Catalog, `compileSdk 37`.
