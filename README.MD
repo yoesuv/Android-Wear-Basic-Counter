@@ -1,6 +1,6 @@
 ## Basic Counter - Wear OS Data Sync
 
-Basic counter with bidirectional sync between phone and Wear OS via `DataClient` (`/count`).
+Basic counter with bidirectional sync between phone and Wear OS via `DataClient` (`/count/delta/<node>`).
 
 [Video demo](https://imgur.com/QsBjtTu)
 
@@ -31,7 +31,7 @@ device loads existing delta items to catch up to the latest total.
 Kotlin, Jetpack Compose, `play-services-wearable` `20.0.1`, Gradle Version Catalog, `compileSdk 37`.
 
 ### Requirements
-Android Studio Ladybug+, JDK 11, Phone emulator **Google Play** image + Wear OS emulator (matching API level recommended).
+Android Studio Quail 2 (`2026.1.2`)+, JDK 17+ (the Gradle daemon uses the pinned JDK 25 toolchain), Phone emulator **Google Play** image + Wear OS emulator (matching API level recommended).
 
 ### Run
 1. Start phone (Play image) and Wear emulators.
