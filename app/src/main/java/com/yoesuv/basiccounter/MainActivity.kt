@@ -69,7 +69,7 @@ fun MainLayout(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "${counter.observeAsState().value}",
+            text = counter.observeAsState(0).value.toString(),
             fontWeight = FontWeight.Bold,
             fontSize = 120.sp,
         )

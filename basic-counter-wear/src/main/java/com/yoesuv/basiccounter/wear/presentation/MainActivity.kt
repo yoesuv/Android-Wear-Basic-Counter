@@ -78,7 +78,7 @@ fun WearApp(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "${counter.observeAsState().value}",
+                    text = counter.observeAsState(0).value.toString(),
                     fontSize = 54.sp,
                     fontWeight = FontWeight.Bold,
                 )
