@@ -10,7 +10,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,24 +25,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.wear.compose.material3.FilledIconButton
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.IconButtonDefaults
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.yoesuv.basiccounter.R
 import com.yoesuv.basiccounter.wear.presentation.theme.BasicCounterTheme
 
 class MainActivity : ComponentActivity() {
-
     private val viewModel: MainWearViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,56 +52,56 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        viewModel.init(this)
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp(viewModel)
+            WearApp(viewModel.counter, viewModel::add, viewModel::subtract)
         }
     }
 }
 
 @Composable
-fun WearApp(viewModel: MainWearViewModel) {
+fun WearApp(
+    counter: LiveData<Int>,
+    onAdd: () -> Unit,
+    onSubtract: () -> Unit,
+) {
     BasicCounterTheme {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center,
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "${viewModel.counter.observeAsState().value}",
+                    text = counter.observeAsState(0).value.toString(),
                     fontSize = 54.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Row {
-                    Button(shape = RectangleShape, onClick = {
-                        viewModel.subtract()
-                    }) {
-                        Row {
-                            Icon(
-                                imageVector = Icons.Default.Remove,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
+                    FilledIconButton(
+                        onClick = onSubtract,
+                        shapes = IconButtonDefaults.shapes(RectangleShape),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Remove,
+                            contentDescription = stringResource(R.string.description_subtract),
+                        )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
-                    Button(shape = RectangleShape, onClick = {
-                        viewModel.add()
-                    }) {
-                        Row {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
+                    FilledIconButton(
+                        onClick = onAdd,
+                        shapes = IconButtonDefaults.shapes(RectangleShape),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(R.string.description_add),
+                        )
                     }
                 }
             }
@@ -108,8 +109,8 @@ fun WearApp(viewModel: MainWearViewModel) {
     }
 }
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    WearApp(MainWearViewModel())
+    WearApp(MutableLiveData(0), {}, {})
 }
